@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fake Job Posting Detector</title>
+  <style>
+    body {
+      background-color: #f2f6ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 40px;
+      color: #333;
+    }
+    h2 {
+      color: #2c3e50;
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+    textarea {
+      width: 80%;
+      height: 200px;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: none;
+    }
+    input[type="file"] {
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    input[type="submit"] {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 30px;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .real {
+      color: green;
+    }
+    .fake {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Fake Job Posting Detector</h2>
+
+  <form action="/predict" method="POST" enctype="multipart/form-data">
+  <textarea name="job_description" placeholder="Paste job description here..."></textarea><br><br>
+  <label>OR upload image:</label><br>
+  <input type="file" name="job_image" accept="image/*"><br><br>
+  
+  <input type="submit" value="Check Posting">
+  <button type="reset" style="margin-left: 10px; padding: 10px 25px;">Clear</button>
+</form>
+
+
+  {% if prediction %}
+  <div class="result {% if 'Real' in prediction %}real{% else %}fake{% endif %}">
+    Result: {{ prediction }}
+
+    <!-- Confidence Bar -->
+    <div style="width: 300px; height: 20px; border: 1px solid #ccc; margin: 10px auto; border-radius: 10px; overflow: hidden;">
+      <div style="width: {% if 'Real' in prediction %}85{% else %}90{% endif %}%; height: 100%; background-color: {% if 'Real' in prediction %}green{% else %}red{% endif %};"></div>
+    </div>
+    <p>Confidence: {% if 'Real' in prediction %}85%{% else %}90%{% endif %}</p>
+  </div>
+{% endif %}
+<div style="margin-top: 40px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; background: #fff4e6; padding: 20px; border-left: 6px solid #f39c12; border-radius: 8px;">
+  <h3>🔍 Tips to Spot Fake Job Postings:</h3>
+  <ul style="text-align: left;">
+    <li>Be cautious if asked to pay money upfront</li>
+    <li>Watch for generic or unrealistic job descriptions</li>
+    <li>Verify the company website & email address</li>
+    <li>Check for spelling and grammar mistakes</li>
+    <li>Too-good-to-be-true salaries often are!</li>
+  </ul>
+</div>
+
+<hr><br>
+<h3>Company Insights</h3>
+<form action="/company" method="POST">
+  
+<select name="company_name" required style="width: 300px; padding: 8px;">
+  <option value="">-- Select Company --</option>
+  <option value="tcs">TCS</option>
+  <option value="infosys">Infosys</option>
+  <option value="wipro">Wipro</option>
+  <option value="google">Google</option>
+  <option value="accenture">Accenture</option>
+  <option value="capgemini">Capgemini</option>
+  <option value="cognizant">Cognizant</option>
+  <option value="hcl">HCL</option>
+  <option value="ibm">IBM</option>
+  <option value="mindtree">Mindtree</option>
+  <option value="oracle">Oracle</option>
+  <option value="zoho">Zoho</option>
+  <option value="techmahindra">Tech Mahindra</option>
+  <option value="lti">LTI</option>
+</select>
+
+  <input type="submit" value="Search Company">
+</form>
+<div style="margin-top: 20px; font-size: 15px;">
+  <p><strong>Supported Companies:</strong></p>
+  <p>TCS, Infosys, Wipro, Google, Accenture, Capgemini, Cognizant, HCL, IBM, Mindtree, Oracle, Zoho, Tech Mahindra, LTI</p>
+</div>
+
+{% if company_info %}
+  <div style="margin-top: 20px; text-align: left; display: inline-block;">
+    <p><strong>Company Name:</strong> {{ company_info.name }}</p>
+    <p><strong>Website:</strong>
+      {% if company_info.website != "N/A" %}
+        <a href="{{ company_info.website }}" target="_blank">{{ company_info.website }}</a>
+      {% else %}
+        N/A
+      {% endif %}
+    </p>
+    <p><strong>Location(s):</strong> {{ company_info.locations }}</p>
+    <p><strong>Hiring Pattern:</strong> {{ company_info.hiring }}</p>
+  </div>
+{% endif %}
+
+</body>
+</html>
