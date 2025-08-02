@@ -20,3 +20,7 @@ A Machine Learning project to detect real vs fake job postings using Logistic Re
 3. Run `app.py`
 4. Open browser at `http://localhost:5000`
 
+## LinkedIn Project Link
+
+   https://www.linkedin.com/posts/tejaswanichadaram_machinelearning-fakejobdetection-htmlcss-activity-7357400394001518594-Yo26?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE_4vS4B33-2eQybH9HjspxWLNSZ0YobORs
+
